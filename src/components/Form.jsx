@@ -1,7 +1,24 @@
-import Billing from "./Billing";
-import { useState } from "react";
+import FormInputs from "./FormInputs";
+import useFormContext from "../hooks/useFormContext";
 
 const Form = () => {
+  const {
+    page,
+    setPage,
+    data,
+    title,
+    canSubmit,
+    disablePrev,
+    disableNext,
+    prevHide,
+    nextHide,
+    submitHide,
+  } = useFormContext();
+
+  const handlePrev = () => setPage((prev) => prev - 1);
+
+  const handleNext = () => setPage((prev) => prev + 1);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(JSON.stringify(data));
@@ -9,13 +26,39 @@ const Form = () => {
 
   const content = (
     <form className="form flex-col" onSubmit={handleSubmit}>
-      <h2>Billing Info</h2>
+      <header className="form-header">
+        <h2>{title[page]}</h2>
 
-      <Billing data={data} handleChange={handleChange} />
+        <div className="button-container">
+          <button
+            type="button"
+            className={`button ${prevHide}`}
+            onClick={handlePrev}
+            disabled={disablePrev}
+          >
+            Prev
+          </button>
 
-      <button className="button" disabled={!canSave}>
-        Submit
-      </button>
+          <button
+            type="button"
+            className={`button ${nextHide}`}
+            onClick={handleNext}
+            disabled={disableNext}
+          >
+            Next
+          </button>
+
+          <button
+            type="submit"
+            className={`button ${submitHide}`}
+            disabled={!canSubmit}
+          >
+            Submit
+          </button>
+        </div>
+      </header>
+
+      <FormInputs />
     </form>
   );
 
